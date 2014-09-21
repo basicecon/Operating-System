@@ -1,0 +1,13 @@
+void starvation() {
+	resume( create(prGen, 1024, 30, "proc 1", 1, 'A') );
+	resume( create(prGen, 1024, 20, "proc 2", 1, 'B') );
+}
+
+int prGen(char c) {
+	while (1) {
+		kprintf("%c", c);
+	}
+}
+
+explanation:
+	starvation() created two process with the first one with higher priority, since resched.c schedule processes based on priority, the first process will always be the current process. It will print 'A' all the time.
