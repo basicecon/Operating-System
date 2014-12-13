@@ -181,6 +181,9 @@ extern	devcall	lflClose(struct dentry *);
 /* in file lflControl.c */
 extern	devcall	lflControl(struct dentry *, int32, int32, int32);
 
+/* in file lfsControl.c */
+extern	devcall	lfsControl(struct dentry *, int32, int32, int32);
+
 /* in file lflGetc.c */
 extern	devcall	lflGetc(struct dentry *);
 
@@ -213,6 +216,15 @@ extern 	status createDirEntry(char *, byte, struct ldentry *, bool8);
 extern	void resetCblk(struct lflcblk *);
 extern	bool8 isEqualPath(char paths[][LF_NAME_LEN], int depth1, char paths2[][LF_NAME_LEN], int);
 extern	bool8 isFileOpen(char paths[][LF_NAME_LEN], int depth, int *);
+
+extern int pathTokenize (char *, char paths[][LF_NAME_LEN]); 
+
+/* in file lfsmkdir.c */
+extern int lfsmkdir (struct dentry	*, char *);
+
+/* in file string.c */
+extern bool8 strcmp(char *, char *);
+extern void strcpy(char *,char *);
 
 /* in file lfsetup.c */
 extern	status	lfsetup(struct lflcblk *);
@@ -489,9 +501,6 @@ extern	void test_head(void);
 /* in file test_root.c */
 extern 	void test_root(void);
 
-/* in file string.c */
-extern bool8 strcmp(char *, char *);
-extern void strcpy(char *,char *);
 
 /* NETWORK BYTE ORDER CONVERSION NOT NEEDED ON A BIG-ENDIAN COMPUTER */
 #define	htons(x)	(x)

@@ -21,11 +21,14 @@ devcall	lflRead (
 	}
 
 	for (numread=0 ; numread < count ; numread++) {
-		kprintf("before getc\r\n");
+		kprintf("numread = %d\r\n", numread);
 		nxtbyte = lflGetc(devptr);
+		kprintf("nxtbyte = %d\r\n", nxtbyte);
+
 		if (nxtbyte == SYSERR) {
 			return SYSERR;
 		} else if (nxtbyte == EOF) {	/* EOF before finished */
+			kprintf("EOF\r\n");
 		    if (numread == 0) {
 			return EOF;
 		    } else {

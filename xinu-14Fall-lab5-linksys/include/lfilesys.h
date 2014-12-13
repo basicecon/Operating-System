@@ -177,10 +177,12 @@ struct	lflcblk	{			/* Local file control block	*/
 extern	struct	lfdata	Lf_data;
 extern	struct	lflcblk	lfltab[];
 extern 	int32	head(did32, char *);	/* in file head.c 		*/
+extern 	sid32	cblkmutex;	/* another mutex */
 
 /* Control functions */
 
-#define	LF_CTL_DEL	F_CTL_DEL	/* Delete a file		*/
+#define	LF_CTL_DEL		F_CTL_DEL	/* Delete a file		*/
 #define	LF_CTL_TRUNC	F_CTL_TRUNC	/* Truncate a file		*/
-#define LF_CTL_SIZE	F_CTL_SIZE	/* Obtain the size of a file	*/
+#define LF_CTL_SIZE		F_CTL_SIZE	/* Obtain the size of a file	*/
+#define LF_CTL_TO_HIERARCHY	F_CTL_TO_HIERARCHY
 #define LF_CTL_MKDIR 	F_CTL_MKDIR 	/* Create a new directory	*/

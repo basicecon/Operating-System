@@ -23,13 +23,21 @@ int updateDir(char paths[][LF_NAME_LEN], int depth) {
 	// size of the root directory and first index block
 	kprintf("entering updateDir...\r\n");
 
-	wait(Lf_data.lf_mutex);
+	wait(Lf_data.lf_mutex); // waiting on mutex forever?
+
+	kprintf("get mutex\r\n");
+
 	if (! Lf_data.lf_dirpresent) {
 		// cache the root directory
 		// should only executed once
 		kprintf("the directory is not present in memory \r\n");
 		struct	lfdir	in_root;	// ptr to in-memory dir
-		if (read(Lf_data.lf_dskdev, (char*)&in_root, LF_AREA_ROOT) == SYSERR) {
+		kprintf("Lf_data.lf_dskdev = %d\r\n", Lf_data.lf_dskdev);
+
+		int r = read(Lf_data.lf_dskdev, (char*)&in_root, LF_AREA_ROOT);
+		kprintf("how many bytes were read in memory = %d\r\n", r);
+		
+		if (r == SYSERR) {
 			kprintf("error when reading root to memory\r\n");
 			signal(Lf_data.lf_mutex);
 			return SYSERR;
@@ -53,20 +61,26 @@ int updateDir(char paths[][LF_NAME_LEN], int depth) {
 	resetCblk(pardir_cblk);
 	// the dir_cblk is occupied by root for now
 	dir_cblk->lfstate = LF_USED;
-	dir_cblk->lfsize = Lf_data.lf_dir.lfd_size;
+	dir_cblk->lfsize = Lf_data.lf_dir.lfd_size; // = 0?
+	kprintf("dir_cblk size = %d\r\n", Lf_data.lf_dir.lfd_size);
 	dir_cblk->lfibnum = Lf_data.lf_dir.lfd_ifirst;
 
 	// root directory depth = 0
 	int curr_depth = 0;
 
 	struct	ldentry	curr_dir_entry;
-	struct	ldentry* curr_dir = &curr_dir_entry;
+	struct	ldentry *curr_dir = &curr_dir_entry;
 
 	// start from root, loop thru all dirs from device switch table, put in ldentry buffer 
-	int num = lflRead(&dev_ptr, (char*)curr_dir, sizeof(struct ldentry));
-	kprintf("%d\r\n", num);
+	//int num = lflRead(&dev_ptr, (char*)curr_dir, sizeof(struct ldentry));
+	//kprintf("%d\r\n", num);
 
+	//kprintf("ldentry size = %d\r\n", sizeof(struct ldentry));
+	//int num = lflRead(&dev_ptr, (char*)curr_dir, sizeof(struct ldentry));
+	//kprintf("%d\r\n", num);
+	
 	while (curr_depth < depth && lflRead(&dev_ptr, (char*)curr_dir, sizeof(struct ldentry)) == sizeof(struct ldentry)) {
+		//kprintf("%d\r\n", num);
 		// when found the current target file/directory
 		if (strcmp(curr_dir->ld_name, paths[curr_depth])) {
 			// return error if it is a file instead of a directory

@@ -16,6 +16,7 @@ syscall	read(
 	struct dentry	*devptr;	/* entry in device switch table	*/
 	int32		retval;		/* value to return to caller	*/
 
+	//kprintf("entering read.c ...\r\n");
 	mask = disable();
 	if (isbaddev(descrp)) {
 		restore(mask);

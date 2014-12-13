@@ -4,6 +4,8 @@
 void test_root(void)
 {
 	// open the file system
+
+/*
 	int32	retval = open(RDISK, "XinuDisk", "rw");
 	if (retval == SYSERR)
 		kprintf("Error opening the Xinu File System\r\n");
@@ -18,30 +20,34 @@ void test_root(void)
 	} else {
 		kprintf("pass");
 	}
-	//kprintf("fd = %d\r\n", fd);
-	/*
-	char	buff[90];
-	int32	i = 0;
-	while (i < 89) {
-		buff[i] = 'a';
-		i ++;
+*/
+
+	int32 retval;
+	//int32 fd[5];
+	int32 i;
+
+	kprintf("Open remote disk\r\n");
+	retval = open(RDISK,"XinuDisk","rw");
+	if (retval == SYSERR){
+		panic("Error: could not open the remote disk, check the server\n\r");
 	}
-	buff[89] = '\0';
-	write(fd, buff, 50);
-	close(fd);
-	// initialized the new buffer
-	char	new_buff[101];
-	i = 0;
-	while (i < 100) {
-		new_buff[i] = 'b';
-		i ++;
+
+	kprintf("Initializing file system\r\n");
+	//retval = lfscreate ( RDISK, 1000, 1024000);
+	retval = control(LFILESYS, LF_CTL_TO_HIERARCHY, 1024*6, 8192*512);
+	if( retval == SYSERR )
+		panic("Initialize file system failed");
+
+	
+	// Create 5 directories
+	char dirname [] = {"/DIR_1"};
+	kprintf("\r\n");
+	for( i=0; i<5; i++){
+		dirname[5] = '1'+i;
+		kprintf("Creating directory %s\r\n", dirname );
+		retval = control(LFILESYS, LF_CTL_MKDIR, (int)dirname, 0);
+		if( retval == SYSERR )
+			kprintf("....failed");
+		kprintf("\r\n");
 	}
-	//new_buff[100] = '\0';
-	fd = open(LFILESYS, "1", "rw");
-	int32	ret = head(fd, new_buff);
-	//kprintf("new_buff -> %s\r\n", new_buff);
-	*/
-	close(fd);
-	//kprintf("how many bytes were read = %d\r\n", ret);
-	//kprintf("first %d characters of the file: %s\n", ret, new_buff);
 }

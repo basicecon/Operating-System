@@ -53,7 +53,7 @@ lfs:
 	on rds
 		-i lfsInit	-o lfsOpen	-c ioerr
 		-r ioerr	-g ioerr	-p ioerr
-		-w ioerr	-s ioerr	-n ioerr
+		-w ioerr	-s ioerr	-n lfsControl
 		-intr ionull
 
 /* type of a local file pseudo-device */

@@ -51,7 +51,7 @@ struct	dentry	devtab[NDEVS] =
 	{ 4, 0, "LFILESYS",
 	  (void *)lfsInit, (void *)lfsOpen, (void *)ioerr,
 	  (void *)ioerr, (void *)ioerr, (void *)ioerr,
-	  (void *)ioerr, (void *)ioerr, (void *)ioerr,
+	  (void *)ioerr, (void *)ioerr, (void *)lfsControl,
 	  (void *)0x0, (void *)ionull, 0 },
 
 /* LFILE0 is lfl */

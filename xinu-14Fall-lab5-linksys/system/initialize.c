@@ -182,6 +182,16 @@ static	void	sysinit(void)
 
 	open(ETHER0,NULL, NULL);
 
+	// intialize the last two entries of lfltab (of struct lflcblk) 
+	// used for directory manipulation
+	struct dentry	cblk;
+	cblk.dvminor = Nlfl + 1;
+	lflInit(&cblk);
+	cblk.dvminor = Nlfl;
+	lflInit(&cblk);
+
+	cblkmutex = semcreate(1);
+
 	/* Create a process to handle network packets */
 	resume((create(netin, 8192, 500, "netin", 0)) );
 

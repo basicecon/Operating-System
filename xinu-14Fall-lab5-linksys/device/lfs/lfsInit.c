@@ -28,5 +28,7 @@ devcall	lfsInit (
 
 	Lf_data.lf_dirpresent = Lf_data.lf_dirdirty = FALSE;
 
+	cblkmutex = semcreate(1);
+
 	return OK;
 }
