@@ -171,7 +171,7 @@ struct	lflcblk	{			/* Local file control block	*/
 	char	lfpath[LF_PATH_DEPTH][LF_NAME_LEN];	/* path			*/
 	int32	lfdepth;		/* depth of the file		*/
 	int32	lfsize;			/* size of file			*/
-	int32	lfibnum;		/* i-block num of first i-block of the file		*/
+	int32	lffibnum;		/* i-block num of first i-block of the file		*/
 };
 
 extern	struct	lfdata	Lf_data;

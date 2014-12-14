@@ -80,7 +80,7 @@ status createDirEntry(char *name, byte type, struct ldentry *dir_ent, bool8 isRe
 	}
 	// update that entry
 	par_dir_ent.ld_size += sizeof(struct ldentry);
-	par_dir_ent.ld_ilist = dir_cblk->lfibnum;
+	par_dir_ent.ld_ilist = dir_cblk->lffibnum;
 	// to overwrite that entry
 	// moveback again since we have read it 
 	lflSeek(&par_dev_ptr, pardir_cblk->lfpos - sizeof(struct ldentry));

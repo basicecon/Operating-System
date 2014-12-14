@@ -77,7 +77,11 @@ int lfsmkdir (
 	bool8 	isInitialized = 0;
 
 	// similar to updateDir
-	while (lflRead(&dev_ptr, (char*)curr_dir, sizeof(struct ldentry)) != SYSERR) {
+	int readcnt = 0;
+	while ((readcnt = lflRead(&dev_ptr, (char*)curr_dir, sizeof(struct ldentry))) != SYSERR) {
+		if (readcnt != sizeof(struct ldentry)) {
+			break;
+		}
 		if (! curr_dir->isOccupied) {
 			if (! isInitialized) {
 				pos = dir_cblk->lfpos - sizeof(struct ldentry);
@@ -97,7 +101,7 @@ int lfsmkdir (
 			}
 			dir_cblk->lfstate = LF_FREE;
 			pardir_cblk->lfstate = LF_FREE;
-			signal(Lf_data.lf_mutex);
+			signal(cblkmutex);
 			return SYSERR;
 		}
 	}
@@ -113,9 +117,9 @@ int lfsmkdir (
 	}
 	// create the file
 	if (createDirEntry(curr_name, LF_TYPE_DIR, curr_dir, isInitialized) == SYSERR) {
-		signal(Lf_data.lf_mutex);
+		signal(cblkmutex);
 		return SYSERR;
 	}
-	signal(Lf_data.lf_mutex);
+	signal(cblkmutex);
 	return OK;		
 }

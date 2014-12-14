@@ -34,7 +34,7 @@ void test_root(void)
 
 	kprintf("Initializing file system\r\n");
 	//retval = lfscreate ( RDISK, 1000, 1024000);
-	retval = control(LFILESYS, LF_CTL_TO_HIERARCHY, 1024*6, 8192*512);
+	retval = control(LFILESYS, LF_CTL_TO_HIERARCHY, 1000, 1024000);
 	if( retval == SYSERR )
 		panic("Initialize file system failed");
 

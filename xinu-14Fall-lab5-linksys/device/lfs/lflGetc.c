@@ -17,7 +17,7 @@ devcall	lflGetc (
 
 	/* Obtain exclusive use of the file */
 
-	kprintf("entering lflGetc...\r\n");
+	//kprintf("entering lflGetc...\r\n");
 	lfptr = &lfltab[devptr->dvminor];
 	wait(lfptr->lfmutex);
 
@@ -25,7 +25,7 @@ devcall	lflGetc (
 
 	if (lfptr->lfstate != LF_USED) {
 		signal(lfptr->lfmutex);
-		kprintf("the file is not open \r\n");
+		//kprintf("the file is not open \r\n");
 		return SYSERR;
 	}
 
@@ -33,7 +33,7 @@ devcall	lflGetc (
 
 	//ldptr = lfptr->lfdirptr;
 	//if (lfptr->lfpos >= ldptr->ld_size) {
-	kprintf("lfptr->lfpos=%d, lfptr->lfsize=%d\r\n", lfptr->lfpos, lfptr->lfsize);
+	//kprintf("lfptr->lfpos=%d, lfptr->lfsize=%d\r\n", lfptr->lfpos, lfptr->lfsize);
 	if (lfptr->lfpos >= lfptr->lfsize) {
 		signal(lfptr->lfmutex);
 		//kprintf("read beyond the end-of-file\r\n");
@@ -44,7 +44,7 @@ devcall	lflGetc (
 	/*	set up a new data block			     */
 
 	if (lfptr->lfbyte >= &lfptr->lfdblock[LF_BLKSIZ]) {
-		kprintf("brefore lfsetup\r\n");
+		//kprintf("brefore lfsetup\r\n");
 		lfsetup(lfptr);
 	}
 
@@ -54,6 +54,6 @@ devcall	lflGetc (
 	onebyte = 0xff & *lfptr->lfbyte++;
 	lfptr->lfpos++;
 	signal(lfptr->lfmutex);
-	kprintf("getc returns %d\r\n", onebyte);
+	//kprintf("getc returns %d\r\n", onebyte);
 	return onebyte;
 }

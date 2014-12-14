@@ -148,7 +148,9 @@ devcall	lfsOpen (
 	lfptr->lfdbdirty = FALSE;
 
 	lfptr->lfsize = fileInfo.ld_size;
-	lfptr->lfibnum = fileInfo.ld_ilist;
+	//lfptr->lfibnum = fileInfo.ld_ilist;
+	lfptr->lffibnum = fileInfo.ld_ilist;
+
 	memcpy(lfptr->lfpath,paths,LF_NAME_LEN * LF_PATH_DEPTH);
 	lfptr->lfdepth = depth;
 

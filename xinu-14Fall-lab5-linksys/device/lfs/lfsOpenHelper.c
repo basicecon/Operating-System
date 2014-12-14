@@ -18,11 +18,15 @@ int lfsOpenHelper(char *fileName, struct ldentry *dir_ent, int32 mbits)
 	bool8 isInitialized = 0;
 
 	// keep reading on parent directory unless find a match
-	while (lflRead(&devptr, (char *)dir_ent, sizeof(struct ldentry)) == sizeof(struct ldentry)) {
+	int readcnt = 0;
+	while ((readcnt = lflRead(&devptr, (char *)dir_ent, sizeof(struct ldentry))) != SYSERR) {
 		kprintf("lfsOpenHelper: reading name %s comparing with %s\r\n", dir_ent->ld_name, fileName);
 
 		// if found a deleted entry -> reuse it 
 		// when we create a new file
+		if (readcnt != sizeof(struct ldentry)) {
+			break;
+		}
 		if (!dir_ent->isOccupied) {
 			if (!isInitialized) {
 				pos = dir_cblk->lfpos - sizeof(struct ldentry);

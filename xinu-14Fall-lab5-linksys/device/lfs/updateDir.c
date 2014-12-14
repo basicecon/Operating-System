@@ -63,7 +63,7 @@ int updateDir(char paths[][LF_NAME_LEN], int depth) {
 	dir_cblk->lfstate = LF_USED;
 	dir_cblk->lfsize = Lf_data.lf_dir.lfd_size; // = 0?
 	kprintf("dir_cblk size = %d\r\n", Lf_data.lf_dir.lfd_size);
-	dir_cblk->lfibnum = Lf_data.lf_dir.lfd_ifirst;
+	dir_cblk->lffibnum = Lf_data.lf_dir.lfd_ifirst;
 
 	// root directory depth = 0
 	int curr_depth = 0;
@@ -79,9 +79,13 @@ int updateDir(char paths[][LF_NAME_LEN], int depth) {
 	//int num = lflRead(&dev_ptr, (char*)curr_dir, sizeof(struct ldentry));
 	//kprintf("%d\r\n", num);
 	
-	while (curr_depth < depth && lflRead(&dev_ptr, (char*)curr_dir, sizeof(struct ldentry)) == sizeof(struct ldentry)) {
+	int readcnt = 0;
+	while (curr_depth < depth && (readcnt = lflRead(&dev_ptr, (char*)curr_dir, sizeof(struct ldentry))) != SYSERR) {
 		//kprintf("%d\r\n", num);
 		// when found the current target file/directory
+		if (readcnt != sizeof(struct ldentry)) {
+			break;
+		}
 		if (strcmp(curr_dir->ld_name, paths[curr_depth])) {
 			// return error if it is a file instead of a directory
 			if (curr_dir->ld_type != LF_TYPE_DIR) {
@@ -95,12 +99,13 @@ int updateDir(char paths[][LF_NAME_LEN], int depth) {
 			resetCblk(dir_cblk);
 			dir_cblk->lfstate = LF_USED;
 			dir_cblk->lfsize = curr_dir->ld_size;
-			dir_cblk->lfibnum = curr_dir->ld_ilist;
+			dir_cblk->lffibnum = curr_dir->ld_ilist;
 			curr_depth ++;
 		} else {
 			kprintf("coundn't find directory = %s compared with %s\r\n", paths[curr_depth], curr_dir->ld_name);
 		}
 	}
+	kprintf("curr_depth = %d, depth = %d\r\n", curr_depth, depth);
 	if (curr_depth != depth) {
 		kprintf("%s doesnt exist\r\n", paths[curr_depth]);
 		return SYSERR;
