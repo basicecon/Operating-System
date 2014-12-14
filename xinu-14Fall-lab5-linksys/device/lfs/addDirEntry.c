@@ -15,7 +15,11 @@
 	dir_ent = target file/directory
 
 */
-status createDirEntry(char *name, byte type, struct ldentry *dir_ent, bool8 isReplaced) {
+
+bool8 strcmp(char *, char *);
+void strcpy(char *,char *);
+
+status addDirEntry(char *name, byte type, struct ldentry *dir_ent, bool8 isReplaced) {
 	// last entry is used for modifying parent directory
 	struct lflcblk *dir_cblk = &lfltab[Nlfl+1];
 	// second last entry is used for modifying grandparent directory
@@ -100,3 +104,17 @@ status createDirEntry(char *name, byte type, struct ldentry *dir_ent, bool8 isRe
 	pardir_cblk->lfstate = LF_FREE;
 	return OK;
 }
+
+bool8 strcmp(char *first, char *second) {
+	while (*first != NULLCH && *first == *second) {
+		first ++;
+		second ++;
+	}
+	return (*first == *second) && (*first == NULLCH);
+}
+
+void strcpy (char *dest,char *src) {
+	while ((*dest++ = *src++) != NULLCH);
+}
+
+

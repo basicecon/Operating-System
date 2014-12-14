@@ -106,7 +106,7 @@ devcall	lfsOpen (
 		signal(Lf_data.lf_mutex);
 		return SYSERR;
 	}
-	// either create a file or open an already existing file
+	// either create a file or open an already existing file -> addDirEntry
 	if (lfsOpenHelper(paths[depth-1], &fileInfo, mbits) == SYSERR) {
 		signal(Lf_data.lf_mutex);
 		return SYSERR;

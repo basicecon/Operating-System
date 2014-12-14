@@ -4,8 +4,9 @@
  * lflistdirh - List contents of a directory
  * ---------------------------------------------------------
  */
+bool8 strcmp(char *, char *);
 
-int lflistdirh(
+status lflistdirh(
 		did32		disk,		/* ID of an open disk device	*/
 		char 		*path 		/* path */
 		)
@@ -39,11 +40,13 @@ int lflistdirh(
 	struct 	dentry	dev_ptr;
 	struct 	dentry 	par_dev_ptr;
 
-	struct	ldentry	curr_dir_entry;
-	struct	ldentry* curr_dir = &curr_dir_entry;
+
 
 	dev_ptr.dvminor = Nlfl + 1;
 	par_dev_ptr.dvminor = Nlfl;
+
+	struct	ldentry	curr_dir_entry;
+	struct	ldentry* curr_dir = &curr_dir_entry;
 
 	char 	*curr_name = paths[depths-1];
 	uint32	pos = 0;
@@ -145,3 +148,11 @@ int lflistdirh(
 	signal(cblkmutex);
 	return OK;		
 }
+/*
+bool8 strcmp(char *first, char *second) {
+	while (*first != NULLCH && *first == *second) {
+		first ++;
+		second ++;
+	}
+	return (*first == *second) && (*first == NULLCH);
+}*/

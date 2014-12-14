@@ -12,7 +12,9 @@
 
 // its more like chechDir
 
-int updateDir(char paths[][LF_NAME_LEN], int depth) {
+bool8 strcmp(char *, char *);
+
+status updateDir(char paths[][LF_NAME_LEN], int depth) {
 
 	// last entry -> parent directory (current directory)
 	struct	lflcblk	*dir_cblk = &lfltab[Nlfl + 1];
@@ -55,12 +57,13 @@ int updateDir(char paths[][LF_NAME_LEN], int depth) {
 	}
 	signal(Lf_data.lf_mutex);
 
-	dev_ptr.dvminor = Nlfl + 1;
-	par_dev_ptr.dvminor = Nlfl;
-
 	// reset the control block of parent and grandparent directory
 	resetCblk(dir_cblk);
 	resetCblk(pardir_cblk);
+
+	dev_ptr.dvminor = Nlfl + 1;
+	par_dev_ptr.dvminor = Nlfl;
+	
 	// the dir_cblk is occupied by root for now
 	dir_cblk->lfstate = LF_USED;
 	dir_cblk->lfsize = Lf_data.lf_dir.lfd_size; // = 0?
@@ -94,23 +97,35 @@ int updateDir(char paths[][LF_NAME_LEN], int depth) {
 				//kprintf("found a file %s which supposed to be a directory \r\n", curr_dir->ld_name);
 				return SYSERR;
 			}
-			//kprintf("found a target directory name = %s\r\n", curr_dir->ld_name);
-			// save the current directory as the parent directory of next loop
-			memcpy(pardir_cblk, dir_cblk, sizeof(struct lflcblk));
-			// reset current directory
-			resetCblk(dir_cblk);
-			dir_cblk->lfstate = LF_USED;
-			dir_cblk->lfsize = curr_dir->ld_size;
-			dir_cblk->lffibnum = curr_dir->ld_ilist;
-			curr_depth ++;
+			
 		} else {
 			//kprintf("coundn't find directory = %s compared with %s\r\n", paths[curr_depth], curr_dir->ld_name);
+			continue;
 		}
+		//kprintf("found a target directory name = %s\r\n", curr_dir->ld_name);
+		// save the current directory as the parent directory of next loop
+		memcpy(pardir_cblk, dir_cblk, sizeof(struct lflcblk));
+		// reset current directory
+		resetCblk(dir_cblk);
+		dir_cblk->lfstate = LF_USED;
+		dir_cblk->lfsize = curr_dir->ld_size;
+		dir_cblk->lffibnum = curr_dir->ld_ilist;
+		curr_depth ++;
+
 	}
 	//kprintf("curr_depth = %d, depth = %d\r\n", curr_depth, depth);
 	if (curr_depth != depth) {
 		//kprintf("%s doesnt exist\r\n", paths[curr_depth]);
 		return SYSERR;
 	}
-	return 1;
+	return OK;
 }
+/*
+bool8 strcmp(char *first, char *second) {
+	while (*first != NULLCH && *first == *second) {
+		first ++;
+		second ++;
+	}
+	return (*first == *second) && (*first == NULLCH);
+}
+*/

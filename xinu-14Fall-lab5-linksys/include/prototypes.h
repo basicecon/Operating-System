@@ -210,12 +210,12 @@ extern	devcall	lfsInit(struct dentry *);
 
 /* in file lfsOpen.c */
 extern	devcall	lfsOpen(struct dentry *, char *, char *);
-extern 	int lfsOpenHelper(char *, struct ldentry *, int32);
-extern 	int updateDir(char paths[][LF_NAME_LEN], int);
-extern 	status createDirEntry(char *, byte, struct ldentry *, bool8);
+extern 	status lfsOpenHelper(char *, struct ldentry *, int32);
+extern 	status updateDir(char paths[][LF_NAME_LEN], int);
+extern 	status addDirEntry(char *, byte, struct ldentry *, bool8);
 extern	void resetCblk(struct lflcblk *);
-extern	bool8 isEqualPath(char paths[][LF_NAME_LEN], int depth1, char paths2[][LF_NAME_LEN], int);
-extern	bool8 isFileOpen(char paths[][LF_NAME_LEN], int depth, int *);
+extern	int isEqualPath(char paths[][LF_NAME_LEN], int depth1, char paths2[][LF_NAME_LEN], int);
+extern	int isFileOpen(char paths[][LF_NAME_LEN], int depth, int *);
 
 extern int pathTokenize (char *, char paths[][LF_NAME_LEN]); 
 
@@ -226,8 +226,8 @@ extern int lfsmkdir (struct dentry	*, char *);
 extern int lflistdirh (did32, char *);
 
 /* in file string.c */
-extern bool8 strcmp(char *, char *);
-extern void strcpy(char *,char *);
+//extern bool8 strcmp(char *, char *);
+//extern void strcpy(char *,char *);
 
 /* in file lfsetup.c */
 extern	status	lfsetup(struct lflcblk *);

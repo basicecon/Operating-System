@@ -1,12 +1,18 @@
 /* lfsmkdir.c - lfsmkdir */
 
 #include <xinu.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 /* ----------------------------------------------------------
  * lfsmkdir - Create a directory type file on disk
  * ---------------------------------------------------------
  */
-int lfsmkdir (
+
+bool8 strcmp(char *, char *);
+
+status lfsmkdir (
 	struct dentry	*devptr,	/* entry in device switch table	*/
 	char *path 					/* path of the file to create 	*/
 	)
@@ -21,6 +27,13 @@ int lfsmkdir (
 	//int32		retval;
 
 	//kprintf("entering lfsmkdir...\r\n");
+
+	// last entry -> parent directory (current directory)
+	struct	lflcblk	*dir_cblk = &lfltab[Nlfl + 1];
+	// second last entry -> grandparent directory 
+	struct	lflcblk	*pardir_cblk = &lfltab[Nlfl];
+	struct 	dentry	dev_ptr;
+	struct 	dentry 	par_dev_ptr;
 
 	char paths[LF_PATH_DEPTH][LF_NAME_LEN];
 	
@@ -59,22 +72,17 @@ int lfsmkdir (
 		return SYSERR;
 	}
 
-	// last entry -> parent directory (current directory)
-	struct	lflcblk	*dir_cblk = &lfltab[Nlfl + 1];
-	// second last entry -> grandparent directory 
-	struct	lflcblk	*pardir_cblk = &lfltab[Nlfl];
-	struct 	dentry	dev_ptr;
-	struct 	dentry 	par_dev_ptr;
-
-	struct	ldentry	curr_dir_entry;
-	struct	ldentry* curr_dir = &curr_dir_entry;
-
+	// pseudo device
 	dev_ptr.dvminor = Nlfl + 1;
 	par_dev_ptr.dvminor = Nlfl;
 
+	// start from the last one -> go up
 	char 	*curr_name = paths[depths-1];
 	uint32	pos = 0;
-	bool8 	isInitialized = 0;
+	bool8 	isInitialized = 0; // find a place?
+
+	struct	ldentry	curr_dir_entry;
+	struct	ldentry* curr_dir = &curr_dir_entry;
 
 	// similar to updateDir
 	int readcnt = 0;
@@ -91,11 +99,15 @@ int lfsmkdir (
 		}
 
 		// when found the current target file/directory
-		if (strcmp(curr_dir->ld_name, curr_name) && curr_dir->isOccupied) {
+		if (strcmp(curr_dir->ld_name, curr_name)) {
+
+			if (! curr_dir->isOccupied) {
+				continue;
+			}
 			// return error if it is a file instead of a directory
-			if (curr_dir->ld_type == LF_TYPE_DIR) {
+			if (curr_dir->ld_type == LF_TYPE_FILE) {
 				//kprintf("found a file %s which supposed to be a directory \r\n", curr_dir->ld_name);
-				//return SYSERR;
+				return SYSERR;
 			} else {
 
 			}
@@ -111,15 +123,21 @@ int lfsmkdir (
 	if (isInitialized) {
 		// reuse an existing directory entry to 
 		// create a new file
-		if (lflSeek(&dev_ptr, pos) == SYSERR) {
-
-		}
+		lflSeek(&dev_ptr, pos); // should do nothing
 	}
 	// create the file
-	if (createDirEntry(curr_name, LF_TYPE_DIR, curr_dir, isInitialized) == SYSERR) {
+	if (addDirEntry(curr_name, LF_TYPE_DIR, curr_dir, isInitialized) == SYSERR) {
 		signal(cblkmutex);
 		return SYSERR;
 	}
 	signal(cblkmutex);
 	return OK;		
 }
+/*
+bool8 strcmp(char *first, char *second) {
+	while (*first != NULLCH && *first == *second) {
+		first ++;
+		second ++;
+	}
+	return (*first == *second) && (*first == NULLCH);
+}*/

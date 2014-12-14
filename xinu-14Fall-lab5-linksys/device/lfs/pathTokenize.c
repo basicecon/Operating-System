@@ -35,20 +35,24 @@ int pathTokenize (
 	}
 	//kprintf("path = %s\r\n", path);
 	i = 0;
+	int flag = 0;
 	while (curr_depth < LF_PATH_DEPTH) {
 		//kprintf("while... i = %d\r\n", i);
+		flag = 0;
 		if (path[i] == '/') {
 			//kprintf(" i = %d\r\n", i);
 			i ++;
 		}
 		for (j = 0; path[i] != NULLCH && path[i] != '/' && j < LF_NAME_LEN - 1; j ++, i ++) {
 			//kprintf("i=%d, j=%d\r\n", i, j);
+			flag = 1;
 			paths[curr_depth][j] = path[i];
 		}
-		if (j) {
-			if (j >= LF_NAME_LEN - 1) {
-				return SYSERR;
-			}
+		if (j >= LF_NAME_LEN - 1) {
+			return SYSERR;
+		}
+
+		if (flag) {	
 			paths[curr_depth][j] = '\0';
 			curr_depth ++;
 		}

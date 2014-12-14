@@ -6,7 +6,7 @@
 // check whether the file indentified by paths is open
 // at the meantime, initialize firstfreeslot to a free entry in lfltab
 
-bool8 isFileOpen(char paths[][LF_NAME_LEN], int depth, int* firstfreeslot) {
+int isFileOpen(char paths[][LF_NAME_LEN], int depth, int* firstfreeslot) {
 	struct lflcblk *lfptr;
 	int i = 0;
 	//kprintf("entering isFileOpen...\r\n");

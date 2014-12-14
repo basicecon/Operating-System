@@ -11,8 +11,7 @@ C_FILES =	lfibclear.c lfibget.c lfibput.c				\
 		lflControl.c lfsControl.c lfsetup.c lftruncate.c lfdbfree.c		\
 		lfscreate.c lfsckfmt.c 						\
 		lfsmkdir.c lflistdirh.c			\
-		lfsOpenHelper.c updateDir.c createDirEntry.c resetCblk.c isEqualPath.c isFileOpen.c  \
-		string.c pathTokenize.c
+		lfsOpenHelper.c updateDir.c addDirEntry.c resetCblk.c isEqualPath.c isFileOpen.c pathTokenize.c \
 
 S_FILES =
 

@@ -4,9 +4,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
-// check whether two file paths are exactly the same
-bool8 isEqualPath(char first[][LF_NAME_LEN], int depth1, char second[][LF_NAME_LEN], int depth2) {
+bool8 strcmp(char *, char *);
+// check whether two file paths are exactly the same (if the target is already open)
+int isEqualPath(char first[][LF_NAME_LEN], int depth1, char second[][LF_NAME_LEN], int depth2) {
 	int i = 0;
 	if (depth1 != depth2) {
 		return 0;
@@ -18,3 +18,11 @@ bool8 isEqualPath(char first[][LF_NAME_LEN], int depth1, char second[][LF_NAME_L
 	}
 	return 1;
 }
+/*
+bool8 strcmp(char *first, char *second) {
+	while (*first != NULLCH && *first == *second) {
+		first ++;
+		second ++;
+	}
+	return (*first == *second) && (*first == NULLCH);
+}*/
