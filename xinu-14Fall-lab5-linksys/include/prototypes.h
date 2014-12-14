@@ -222,6 +222,9 @@ extern int pathTokenize (char *, char paths[][LF_NAME_LEN]);
 /* in file lfsmkdir.c */
 extern int lfsmkdir (struct dentry	*, char *);
 
+/* in file lflistdirh.c */
+extern int lflistdirh (did32, char *);
+
 /* in file string.c */
 extern bool8 strcmp(char *, char *);
 extern void strcpy(char *,char *);

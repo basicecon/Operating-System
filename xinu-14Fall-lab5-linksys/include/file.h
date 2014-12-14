@@ -16,6 +16,7 @@
 #define	F_CTL_DEL	1		/* Delete a file		*/
 #define	F_CTL_TRUNC	2		/* Truncate a file		*/
 #define	F_CTL_MKDIR	3		/* make a directory		*/
-#define	F_CTL_RMDIR	4		/* remove a directory		*/
-#define F_CTL_SIZE	5		/* Obtain the size of a file	*/
-#define F_CTL_TO_HIERARCHY 6
+#define F_CTL_LS	4		/* List contents of a directory */
+#define	F_CTL_RMDIR	5		/* remove a directory		*/
+#define F_CTL_SIZE	6		/* Obtain the size of a file	*/
+//#define F_CTL_TO_HIERARCHY 7

@@ -20,7 +20,7 @@ int lfsmkdir (
 	//bool8		found;
 	//int32		retval;
 
-	kprintf("entering lfsmkdir...\r\n");
+	//kprintf("entering lfsmkdir...\r\n");
 
 	char paths[LF_PATH_DEPTH][LF_NAME_LEN];
 	

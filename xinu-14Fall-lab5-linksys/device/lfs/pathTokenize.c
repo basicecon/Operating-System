@@ -15,7 +15,7 @@ int pathTokenize (
 	char 	paths[][LF_NAME_LEN]				/* separated paths	*/
 	) 
 {
-	kprintf("entering pathTokenize\r\n");
+	//kprintf("entering pathTokenize\r\n");
 	int curr_depth = 0;
 
 	int i, j = 0;
@@ -33,7 +33,7 @@ int pathTokenize (
 		paths[0][1] = '\0';
 		return 1;
 	}
-	kprintf("path = %s\r\n", path);
+	//kprintf("path = %s\r\n", path);
 	i = 0;
 	while (curr_depth < LF_PATH_DEPTH) {
 		//kprintf("while... i = %d\r\n", i);

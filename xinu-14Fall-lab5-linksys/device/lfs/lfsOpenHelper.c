@@ -20,7 +20,7 @@ int lfsOpenHelper(char *fileName, struct ldentry *dir_ent, int32 mbits)
 	// keep reading on parent directory unless find a match
 	int readcnt = 0;
 	while ((readcnt = lflRead(&devptr, (char *)dir_ent, sizeof(struct ldentry))) != SYSERR) {
-		kprintf("lfsOpenHelper: reading name %s comparing with %s\r\n", dir_ent->ld_name, fileName);
+		//kprintf("lfsOpenHelper: reading name %s comparing with %s\r\n", dir_ent->ld_name, fileName);
 
 		// if found a deleted entry -> reuse it 
 		// when we create a new file

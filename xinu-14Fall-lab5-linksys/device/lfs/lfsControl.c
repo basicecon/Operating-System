@@ -16,17 +16,17 @@ devcall lfsControl (
 	int32	retval;			/* return value from func. call	*/
 
 	switch (func) {
-		
+	/*
 		case LF_CTL_TO_HIERARCHY:
 			retval = lfscreate(LF_DISK_DEV, arg1, arg2);
 			return retval;
-
+	*/
 		case LF_CTL_MKDIR:
 			retval = lfsmkdir(devptr, (char*)arg1);
 			return retval;
-		//case LF_CTL_LS:
-		//	retval = lflistdirh( LF_DISK_DEV, arg1 );
-		//	return retval;
+		case LF_CTL_LS:
+			retval = lflistdirh( LF_DISK_DEV, (char*)arg1 );
+			return retval;
 		default:
 			return SYSERR;
 	}

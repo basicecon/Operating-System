@@ -186,3 +186,5 @@ extern 	sid32	cblkmutex;	/* another mutex */
 #define LF_CTL_SIZE		F_CTL_SIZE	/* Obtain the size of a file	*/
 #define LF_CTL_TO_HIERARCHY	F_CTL_TO_HIERARCHY
 #define LF_CTL_MKDIR 	F_CTL_MKDIR 	/* Create a new directory	*/
+#define LF_CTL_LS		F_CTL_LS	/* List the content of a directory */
+

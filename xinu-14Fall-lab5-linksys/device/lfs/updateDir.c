@@ -10,6 +10,8 @@
 // and lfltab[Nlfl] to /a/
 // take in parameter tokenized paths
 
+// its more like chechDir
+
 int updateDir(char paths[][LF_NAME_LEN], int depth) {
 
 	// last entry -> parent directory (current directory)
@@ -21,35 +23,35 @@ int updateDir(char paths[][LF_NAME_LEN], int depth) {
 
 	// read the 0th data block to find out 
 	// size of the root directory and first index block
-	kprintf("entering updateDir...\r\n");
+	//kprintf("entering updateDir...\r\n");
 
 	wait(Lf_data.lf_mutex); // waiting on mutex forever?
 
-	kprintf("get mutex\r\n");
+	//kprintf("get mutex\r\n");
 
 	if (! Lf_data.lf_dirpresent) {
 		// cache the root directory
 		// should only executed once
-		kprintf("the directory is not present in memory \r\n");
+		//kprintf("the directory is not present in memory \r\n");
 		struct	lfdir	in_root;	// ptr to in-memory dir
-		kprintf("Lf_data.lf_dskdev = %d\r\n", Lf_data.lf_dskdev);
+		//kprintf("Lf_data.lf_dskdev = %d\r\n", Lf_data.lf_dskdev);
 
 		int r = read(Lf_data.lf_dskdev, (char*)&in_root, LF_AREA_ROOT);
-		kprintf("how many bytes were read in memory = %d\r\n", r);
+		//kprintf("how many bytes were read in memory = %d\r\n", r);
 		
 		if (r == SYSERR) {
-			kprintf("error when reading root to memory\r\n");
+			//kprintf("error when reading root to memory\r\n");
 			signal(Lf_data.lf_mutex);
 			return SYSERR;
 		} else {
-			kprintf("read root in memory\r\n");
+			//kprintf("read root in memory\r\n");
 		}
 		// set the global data dir to root
 		Lf_data.lf_dir = in_root;
 		Lf_data.lf_dirpresent = TRUE;
 		Lf_data.lf_dirdirty = FALSE;
 	} else {
-		kprintf("the parent/current directory is present in memory \r\n");
+		//kprintf("the parent/current directory is present in memory \r\n");
 	}
 	signal(Lf_data.lf_mutex);
 
@@ -62,7 +64,7 @@ int updateDir(char paths[][LF_NAME_LEN], int depth) {
 	// the dir_cblk is occupied by root for now
 	dir_cblk->lfstate = LF_USED;
 	dir_cblk->lfsize = Lf_data.lf_dir.lfd_size; // = 0?
-	kprintf("dir_cblk size = %d\r\n", Lf_data.lf_dir.lfd_size);
+	//kprintf("dir_cblk size = %d\r\n", Lf_data.lf_dir.lfd_size);
 	dir_cblk->lffibnum = Lf_data.lf_dir.lfd_ifirst;
 
 	// root directory depth = 0
@@ -89,10 +91,10 @@ int updateDir(char paths[][LF_NAME_LEN], int depth) {
 		if (strcmp(curr_dir->ld_name, paths[curr_depth])) {
 			// return error if it is a file instead of a directory
 			if (curr_dir->ld_type != LF_TYPE_DIR) {
-				kprintf("found a file %s which supposed to be a directory \r\n", curr_dir->ld_name);
+				//kprintf("found a file %s which supposed to be a directory \r\n", curr_dir->ld_name);
 				return SYSERR;
 			}
-			kprintf("found a target directory name = %s\r\n", curr_dir->ld_name);
+			//kprintf("found a target directory name = %s\r\n", curr_dir->ld_name);
 			// save the current directory as the parent directory of next loop
 			memcpy(pardir_cblk, dir_cblk, sizeof(struct lflcblk));
 			// reset current directory
@@ -102,12 +104,12 @@ int updateDir(char paths[][LF_NAME_LEN], int depth) {
 			dir_cblk->lffibnum = curr_dir->ld_ilist;
 			curr_depth ++;
 		} else {
-			kprintf("coundn't find directory = %s compared with %s\r\n", paths[curr_depth], curr_dir->ld_name);
+			//kprintf("coundn't find directory = %s compared with %s\r\n", paths[curr_depth], curr_dir->ld_name);
 		}
 	}
-	kprintf("curr_depth = %d, depth = %d\r\n", curr_depth, depth);
+	//kprintf("curr_depth = %d, depth = %d\r\n", curr_depth, depth);
 	if (curr_depth != depth) {
-		kprintf("%s doesnt exist\r\n", paths[curr_depth]);
+		//kprintf("%s doesnt exist\r\n", paths[curr_depth]);
 		return SYSERR;
 	}
 	return 1;

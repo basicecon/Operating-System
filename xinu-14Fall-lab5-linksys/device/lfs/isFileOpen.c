@@ -9,22 +9,22 @@
 bool8 isFileOpen(char paths[][LF_NAME_LEN], int depth, int* firstfreeslot) {
 	struct lflcblk *lfptr;
 	int i = 0;
-	kprintf("entering isFileOpen...\r\n");
-	kprintf("Nlfl = %d\r\n", Nlfl);
+	//kprintf("entering isFileOpen...\r\n");
+	//kprintf("Nlfl = %d\r\n", Nlfl);
 
 	for (i = 0; i < Nlfl; i ++) {
 		lfptr = &lfltab[i];
 		if (lfptr->lfstate == LF_FREE) {
 			// first free slot in lfltab
 			if (*firstfreeslot == SYSERR) {
-				kprintf("find the first free slot in lfltab at position %d\r\n", i);
+				//kprintf("find the first free slot in lfltab at position %d\r\n", i);
 				*firstfreeslot = i;
 			} else {
-				kprintf("other free slots at position = %d\r\n", i);	
+				//kprintf("other free slots at position = %d\r\n", i);	
 			}
 		} else { // the slot is currently occupied by an open file
 			// compare name of paths and the name of open file
-			kprintf("compare \"%s\" and \"%s\"\r\n", lfptr->lfpath, paths);
+			//kprintf("compare \"%s\" and \"%s\"\r\n", lfptr->lfpath, paths);
 			if (isEqualPath(lfptr->lfpath, lfptr->lfdepth, paths, depth)) {
 				// file is already open
 				signal(Lf_data.lf_mutex);

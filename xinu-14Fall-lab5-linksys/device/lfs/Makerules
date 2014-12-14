@@ -10,7 +10,7 @@ C_FILES =	lfibclear.c lfibget.c lfibput.c				\
 		lflRead.c lflSeek.c lflWrite.c lfsInit.c lfsOpen.c	\
 		lflControl.c lfsControl.c lfsetup.c lftruncate.c lfdbfree.c		\
 		lfscreate.c lfsckfmt.c 						\
-		lfsmkdir.c 						\
+		lfsmkdir.c lflistdirh.c			\
 		lfsOpenHelper.c updateDir.c createDirEntry.c resetCblk.c isEqualPath.c isFileOpen.c  \
 		string.c pathTokenize.c
 

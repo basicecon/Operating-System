@@ -15,7 +15,7 @@ devcall	lfsOpen (
 	 char	*mode			/* mode chars: 'r' 'w' 'o' 'n'	*/
 	)
 {
-	kprintf("entering lfsOpen\r\n");
+	//kprintf("entering lfsOpen\r\n");
 	//struct	lfdir	*dirptr;	/* ptr to in-memory directory	*/
 	char		*from;				/* ptrs used during copy		*/
 	//char		*nam, *cmp;			/* ptrs used during comparison	*/
@@ -35,11 +35,12 @@ devcall	lfsOpen (
 	}
 */
 	char paths[LF_PATH_DEPTH][LF_NAME_LEN];
-	//char	*path = name;		/* complete path of file to open*/
-	//int 	depth = pathTokenize(path, (char **)paths);
+	char	*path = name;		/* complete path of file to open*/
+	int 	depth = pathTokenize(path, paths);
 	
 	// hard code
 	// "/a/b/c"
+	/*
 	paths[0][0] = '/'; // root directory
 	paths[0][1] = '\0';
 	paths[1][0] = 'a';	// grandparent directory
@@ -50,13 +51,14 @@ devcall	lfsOpen (
 	paths[3][1] = '\0';
 	int depth = 4;
 	char *tmp_path = "\\a\\b\\c";
+	*/
 
 	// is 'path' valid?
 	if (depth == SYSERR) {
 		return SYSERR;
 	}
 	if (depth == 1 && paths[0][0] == '/') {
-		kprintf("you cannot open an root directory\r\n");
+		//kprintf("you cannot open an root directory\r\n");
 		return SYSERR;
 	}
 
@@ -88,7 +90,7 @@ devcall	lfsOpen (
 		signal(Lf_data.lf_mutex);
 		return SYSERR;
 	} else {
-		kprintf("no such open file \"%s\" exists, and found a free slot at position = %d\r\n", tmp_path, (int)lfnext);
+		//kprintf("no such open file \"%s\" exists, and found a free slot at position = %d\r\n", tmp_path, (int)lfnext);
 	}
 	// no slave devices are available
 	if (lfnext == SYSERR) {
