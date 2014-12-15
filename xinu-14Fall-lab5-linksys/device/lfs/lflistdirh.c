@@ -68,7 +68,17 @@ status lflistdirh(
 		//kprintf("readcnt = %d\r\n", readcnt);
 		// if the target is root
 		if (depths == 1 && paths[0][0] == '/' && paths[0][1] == '\0') {
-			if (readcnt != sizeof(struct ldentry) || !curr_dir->isOccupied) {
+			//kprintf("its root\r\n");
+			int flag = 0;
+			if (readcnt != sizeof(struct ldentry)) {
+				flag = 1;
+				//kprintf("size not match\r\n");
+			}
+			if (!curr_dir->isOccupied) {
+				flag = 1;
+				//kprintf("not occupied\r\n");
+			}
+			if (flag) {
 				break;
 			}
 			found = 1;
@@ -115,8 +125,12 @@ status lflistdirh(
 				int exit_flag = 0;
 
 				/* save the current directory as the parent directory for the following while loop */
+				// while: looping thru parent directory
+
+				//struct	lflcblk	*tmp_cblk = &lfltab[Nlfl + 2];
 
 				memcpy(pardir_cblk, dir_cblk, sizeof(struct lflcblk));
+				//memcpy(dir_cblk, pardir_cblk, sizeof(struct lflcblk));
 				// reset current directory
 				resetCblk(dir_cblk);
 				dir_cblk->lfstate = LF_USED;
@@ -138,6 +152,9 @@ status lflistdirh(
 				if (exit_flag) {
 					break;
 				}
+
+				//memcpy(tmp_cblk, dir_cblk, sizeof(struct lflcblk));
+				//resetCblk(dir_cblk);
 
 				dir_cblk->lfstate = LF_FREE;
 				pardir_cblk->lfstate = LF_FREE;

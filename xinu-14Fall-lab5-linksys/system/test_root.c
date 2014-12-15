@@ -28,6 +28,7 @@ void test_root(void)
 
 	//char wbuff[] = {"While disks provide a convenient means of permanent storage, they support only a simple and limited naming mechanism of the data they hold (the block number). File systems are used to overcoming this limitation by providing a more elaborate and useful naming mechanism for the data blocks on a disk. This original Xinu File System is a mini-file system with an elegant design that has a limited numbers of files, short file names, and no hierarchical directory structure; however, it allows files to grow dynamically. \r\nThe objective of this lab is to enhance the existing file system for Xinu. You will extend the functionality of the Xinu File System on top of the remote disk abstraction. You are going to transform the current flat file system into a new file system with hierarchical directory structure. \r\n"};
 	//int32 wbufflen = sizeof( wbuff );
+	
 	//char rbuff[ wbufflen * 10 ];
 	//int32 rbufflen = sizeof( rbuff );
 	
@@ -58,6 +59,7 @@ void test_root(void)
 	}
 	
 	//Open a file in each directory
+	
 	char filename [] = {"/DIR_1/file"};
 	kprintf("\r\n");
 	for( i=0; i<5; i++)
@@ -68,9 +70,79 @@ void test_root(void)
 		kprintf("  Got the sudo device : %d \r\n", fd[i]);
 	}
 
-	// --------------------------------------------------------------------------------
+/*
+	kprintf("\r\nWriting %d characters to /DIR_1/file .... ", wbufflen );
+	retval = write( fd[0], wbuff, wbufflen );
+	if( retval == SYSERR )
+		kprintf("Write failed \r\b");
+	else
+		kprintf("Write returned %d \r\n", retval );
+*/
+
+	kprintf("\r\nClosing all files \r\n");
+	for( i=0; i<5; i++ ){
+		retval = close( fd[i] );
+		if( retval == SYSERR )
+			kprintf("Close file /DIR_%d/file failed \r\n", i+1);
+	}
+
+	// -------
 	/*
+	char filename5 [] = {"/DIR_1/file1"};
+	kprintf("Opening file at %s\r\n", filename5);
+	fd[0] = open(LFILESYS, filename5, "rwn");
+	kprintf("  Got the sudo device : %d \r\n", fd[0]);
+
+	i = 0;
+	retval = close( fd[i] );
+	if( retval == SYSERR )
+		kprintf("Close file /DIR_%d/file failed \r\n", i+1);
+
+
+	char filename1 [] = {"/DIR_2/file2"};
+	kprintf("Opening file at %s\r\n", filename1);
+	fd[0] = open(LFILESYS, filename1, "rwn");
+	kprintf("  Got the sudo device : %d \r\n", fd[0]);
+
+	retval = close( fd[i] );
+	if( retval == SYSERR )
+		kprintf("Close file /DIR_%d/file failed \r\n", i+1);
+
+	char filename2 [] = {"/DIR_3/file3"};
+	kprintf("Opening file at %s\r\n", filename2);
+	fd[0] = open(LFILESYS, filename2, "rwn");
+	kprintf("  Got the sudo device : %d \r\n", fd[0]);
+
+	retval = close( fd[i] );
+	if( retval == SYSERR )
+		kprintf("Close file /DIR_%d/file failed \r\n", i+1);
+
+	char filename3 [] = {"/DIR_4/file4"};
+	kprintf("Opening file at %s\r\n", filename3);
+	fd[0] = open(LFILESYS, filename3, "rwn");
+	kprintf("  Got the sudo device : %d \r\n", fd[0]);
+
+	retval = close( fd[i] );
+	if( retval == SYSERR )
+		kprintf("Close file /DIR_%d/file failed \r\n", i+1);
+
+	char filename4 [] = {"/DIR_5/file5"};
+	kprintf("Opening file at %s\r\n", filename4);
+	fd[0] = open(LFILESYS, filename4, "rwn");
+	kprintf("  Got the sudo device : %d \r\n", fd[0]);
+
+	retval = close( fd[i] );
+	if( retval == SYSERR )
+		kprintf("Close file /DIR_%d/file failed \r\n", i+1);
+	
+	*/
+
+
+
+	// --------------------------------------------------------------------------------
+	
 	// Write to first file
+	/*
 	kprintf("\r\nWriting %d characters to /DIR_1/file .... ", wbufflen );
 	retval = write( fd[0], wbuff, wbufflen );
 	if( retval == SYSERR )
