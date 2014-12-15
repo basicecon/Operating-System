@@ -82,6 +82,8 @@ status lfsOpenHelper(char *fileName, struct ldentry *dir_ent, int32 mbits)
 		pardir_cblk->lfstate = LF_FREE;
 		return SYSERR;
 	}
+
+	//kprintf("successfully created a directory!\r\n");
 	return OK;
 
 

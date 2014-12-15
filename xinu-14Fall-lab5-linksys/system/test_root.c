@@ -26,8 +26,8 @@ void test_root(void)
 	int32 fd[5];
 	int32 i;
 
-	char wbuff[] = {"While disks provide a convenient means of permanent storage, they support only a simple and limited naming mechanism of the data they hold (the block number). File systems are used to overcoming this limitation by providing a more elaborate and useful naming mechanism for the data blocks on a disk. This original Xinu File System is a mini-file system with an elegant design that has a limited numbers of files, short file names, and no hierarchical directory structure; however, it allows files to grow dynamically. \r\nThe objective of this lab is to enhance the existing file system for Xinu. You will extend the functionality of the Xinu File System on top of the remote disk abstraction. You are going to transform the current flat file system into a new file system with hierarchical directory structure. \r\n"};
-	int32 wbufflen = sizeof( wbuff );
+	//char wbuff[] = {"While disks provide a convenient means of permanent storage, they support only a simple and limited naming mechanism of the data they hold (the block number). File systems are used to overcoming this limitation by providing a more elaborate and useful naming mechanism for the data blocks on a disk. This original Xinu File System is a mini-file system with an elegant design that has a limited numbers of files, short file names, and no hierarchical directory structure; however, it allows files to grow dynamically. \r\nThe objective of this lab is to enhance the existing file system for Xinu. You will extend the functionality of the Xinu File System on top of the remote disk abstraction. You are going to transform the current flat file system into a new file system with hierarchical directory structure. \r\n"};
+	//int32 wbufflen = sizeof( wbuff );
 	//char rbuff[ wbufflen * 10 ];
 	//int32 rbufflen = sizeof( rbuff );
 	
@@ -69,6 +69,7 @@ void test_root(void)
 	}
 
 	// --------------------------------------------------------------------------------
+	/*
 	// Write to first file
 	kprintf("\r\nWriting %d characters to /DIR_1/file .... ", wbufflen );
 	retval = write( fd[0], wbuff, wbufflen );
@@ -78,6 +79,7 @@ void test_root(void)
 		kprintf("Write returned %d \r\n", retval );
 
 	// Write to last file
+	
 	kprintf("\r\nWriting %d characters to /DIR_5/file \r\n", wbufflen*10 );
 	int total = 0;
 	for( i=0; i<10; i++ ){
@@ -91,7 +93,7 @@ void test_root(void)
 	}
 	if( total != 0 )
 		kprintf("Wrote a total of %d characters\r\n", total );
-
+	*/
 	
 	//list files
 	kprintf("\r\nList root directory:\r\n");

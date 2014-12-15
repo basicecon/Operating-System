@@ -55,10 +55,12 @@ devcall	lfsOpen (
 
 	// is 'path' valid?
 	if (depth == SYSERR) {
+		//kprintf("lfsOpen: depth invalid\r\n");
 		return SYSERR;
 	}
 	if (depth == 1 && paths[0][0] == '/') {
 		//kprintf("you cannot open an root directory\r\n");
+		//kprintf("lfsOpen: you are trying to open a directory(root)\r\n");
 		return SYSERR;
 	}
 
@@ -70,6 +72,7 @@ devcall	lfsOpen (
 		}
 	}
 	if (i >= LF_NAME_LEN) {		/* name is too long */
+		//kprintf("lfsOpen: name too long\r\n");
 		return SYSERR;
 	}
 
@@ -77,6 +80,7 @@ devcall	lfsOpen (
 
 	mbits = lfgetmode(mode);
 	if (mbits == SYSERR) {
+		//kprintf("lfsOpen: getmode error]\r\n");
 		return SYSERR;
 	}
 
@@ -88,6 +92,7 @@ devcall	lfsOpen (
 	// need implement isFileOpen
 	if (isFileOpen(paths, depth, &lfnext) == TRUE) {
 		signal(Lf_data.lf_mutex);
+		//kprintf("lfsOpen: file already open\r\n");
 		return SYSERR;
 	} else {
 		//kprintf("no such open file \"%s\" exists, and found a free slot at position = %d\r\n", tmp_path, (int)lfnext);
@@ -95,6 +100,7 @@ devcall	lfsOpen (
 	// no slave devices are available
 	if (lfnext == SYSERR) {
 		signal(Lf_data.lf_mutex);
+		//kprintf("lfsOpen: no slave devices are available\r\n");
 		return SYSERR;
 	}
 
@@ -102,12 +108,18 @@ devcall	lfsOpen (
 	signal(Lf_data.lf_mutex);
 	// Initialize lfltab[Nlfl+1] and lfltab[Nlfl] 
 	// to parent(current directory not current target) and grandparent of the target file
-	if (updateDir(paths, depth) == SYSERR) {
+	
+
+	// why "depth - 1" -> see updateDir
+
+	if (updateDir(paths, depth - 1) == SYSERR) {
 		signal(Lf_data.lf_mutex);
+		//kprintf("lfsOpen -> updateDir return SYSERR\r\n");
 		return SYSERR;
 	}
 	// either create a file or open an already existing file -> addDirEntry
 	if (lfsOpenHelper(paths[depth-1], &fileInfo, mbits) == SYSERR) {
+		//kprintf("lfsOpen -> lfsOpenHelper return SYSERR\r\n");
 		signal(Lf_data.lf_mutex);
 		return SYSERR;
 	}

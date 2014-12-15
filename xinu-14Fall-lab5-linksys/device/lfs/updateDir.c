@@ -42,7 +42,7 @@ status updateDir(char paths[][LF_NAME_LEN], int depth) {
 		//kprintf("how many bytes were read in memory = %d\r\n", r);
 		
 		if (r == SYSERR) {
-			//kprintf("error when reading root to memory\r\n");
+			//kprintf("updateDir: error when reading root to memory\r\n");
 			signal(Lf_data.lf_mutex);
 			return SYSERR;
 		} else {
@@ -94,7 +94,7 @@ status updateDir(char paths[][LF_NAME_LEN], int depth) {
 		if (strcmp(curr_dir->ld_name, paths[curr_depth])) {
 			// return error if it is a file instead of a directory
 			if (curr_dir->ld_type != LF_TYPE_DIR) {
-				//kprintf("found a file %s which supposed to be a directory \r\n", curr_dir->ld_name);
+				//kprintf("UpdateDir: found a file %s which supposed to be a directory \r\n", curr_dir->ld_name);
 				return SYSERR;
 			}
 			
@@ -113,9 +113,17 @@ status updateDir(char paths[][LF_NAME_LEN], int depth) {
 		curr_depth ++;
 
 	}
-	//kprintf("curr_depth = %d, depth = %d\r\n", curr_depth, depth);
+	// should display different behavior when dealing with "mkdir" and "open"
+	// mkdir -> creates directory when reaching target's parent 
+	// open -> creates directory when reading target's parent && mode set to "rw"
+	// 		-> otherwise, return SYSERR
+
+
+	// TODO: create a global variable indicating which function called updateDir
+
+ 	//kprintf("curr_depth = %d, depth = %d\r\n", curr_depth, depth);
 	if (curr_depth != depth) {
-		//kprintf("%s doesnt exist\r\n", paths[curr_depth]);
+		//kprintf("updateDir: %s doesnt exist\r\n", paths[curr_depth]);
 		return SYSERR;
 	}
 	return OK;

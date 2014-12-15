@@ -91,39 +91,52 @@ status lflistdirh(
 				continue;
 			}
 
-			// when found the current target file/directory
+			// when found the current target file/directory 's parent directory
+
 			if (strcmp(curr_dir->ld_name, curr_name) && curr_dir->isOccupied) {
 					
 				// make sure it is a directory
 				//kprintf("compare: %s == %s\r\n", curr_dir->ld_name, curr_name);
 				if (curr_dir->ld_type == LF_TYPE_FILE) {
-					//kprintf("target is a file -> %s\r\n", curr_dir->ld_name);
+					//kprintf("lflistdirh: target is a file -> %s\r\n", curr_dir->ld_name);
 					
 					dir_cblk->lfstate = LF_FREE;
 					pardir_cblk->lfstate = LF_FREE;
 					signal(cblkmutex);
 					return SYSERR;
 
-				} else {
-					//kprintf("target is a directory -> %s\r\n", curr_dir->ld_name);
 				}
-				// target is a directory: do the list work
+				// target's parent is a directory: do the list work
 				found = 1;
 				
 				// TODO
 				// find the children of the target directory
 				int tmpcnt = 0;
+				int exit_flag = 0;
+
+				/* save the current directory as the parent directory for the following while loop */
+
+				memcpy(pardir_cblk, dir_cblk, sizeof(struct lflcblk));
+				// reset current directory
+				resetCblk(dir_cblk);
+				dir_cblk->lfstate = LF_USED;
+				dir_cblk->lfsize = curr_dir->ld_size;
+				dir_cblk->lffibnum = curr_dir->ld_ilist;
+
+				/* ---------------------------------------------------------------------------- */
+
 				while ((tmpcnt = lflRead(&dev_ptr, (char*)curr_dir, sizeof(struct ldentry))) != SYSERR) {
 					if (tmpcnt != sizeof(struct ldentry)) {
+						exit_flag = 1;
 						break;
 					}
 					if (! curr_dir->isOccupied) {
 						continue;
 					}
-					//kprintf("LS:\r\n");
-					//kprintf("%s\r\n", curr_dir->ld_name);
-					//kprintf("\r\n");
-						
+					kprintf("%s\r\n", curr_dir->ld_name);
+				}
+				if (exit_flag) {
+					break;
 				}
 
 				dir_cblk->lfstate = LF_FREE;
@@ -136,7 +149,7 @@ status lflistdirh(
 
 	if(!found) // didnt find target
 	{
-		//kprintf("no such directory \r\n");
+		//kprintf("lflistdirh: no such directory \r\n");
 
 		dir_cblk->lfstate = LF_FREE;
 		pardir_cblk->lfstate = LF_FREE;
@@ -146,6 +159,7 @@ status lflistdirh(
 	}
 
 	signal(cblkmutex);
+	//kprintf("successfully list \r\n");
 	return OK;		
 }
 /*

@@ -23,6 +23,7 @@ devcall	lflPutc (
 	/* If file is not open, return an error */
 
 	if (lfptr->lfstate != LF_USED) {
+		//kprintf("lflPutc: the file is not open\r\n");
 		signal(lfptr->lfmutex);
 		return SYSERR;
 	}
@@ -33,6 +34,7 @@ devcall	lflPutc (
 	//ldptr = lfptr->lfdirptr;
 	//if (lfptr->lfpos > ldptr->ld_size) {
 	if (lfptr->lfpos > lfptr->lfsize) {
+		//kprintf("lflPutc: beyond the file size\r\n");
 		signal(lfptr->lfmutex);
 		return SYSERR;
 	}
@@ -42,6 +44,7 @@ devcall	lflPutc (
 	if (lfptr->lfbyte >= &lfptr->lfdblock[LF_BLKSIZ]) {
 
 		/* Set up block for current file position */
+		//kprintf("lflPutc: before setup\r\n");
 		lfsetup(lfptr);
 	}
 
